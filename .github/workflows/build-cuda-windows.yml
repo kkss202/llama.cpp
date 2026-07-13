@@ -64,6 +64,8 @@ jobs:
             -DGGML_BACKEND_DL=ON ^
             -DGGML_CPU_ALL_VARIANTS=ON ^
             -DGGML_CUDA=ON ^
+            -DGGML_CUDA_FA=ON ^
+            -DLLAMA_MCP=ON ^
             -DGGML_RPC=ON ^
             -DGGML_CUDA_CUB_3DOT2=ON
           set /A NINJA_JOBS=%NUMBER_OF_PROCESSORS%-1
@@ -74,6 +76,16 @@ jobs:
         uses: ./.github/actions/ccache-clear
         with:
           key: release-windows-2022-x64-cuda-${{ matrix.cuda }}
+
+      - name: Setup ccache
+        uses: ilammy/msvc‑ccache@v1
+
+      - name: Cache ccache data
+        uses: actions/cache@v3
+        with:
+         path: ~/.ccache
+         key: windows‑cuda‑ccache‑${{ github.sha }}
+         restore‑keys: windows‑cuda‑ccache‑
 
   hip:
     runs-on: windows-2022
