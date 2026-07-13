@@ -77,16 +77,6 @@ jobs:
         with:
           key: release-windows-2022-x64-cuda-${{ matrix.cuda }}
 
-      - name: Setup ccache
-        uses: ilammy/msvc‑ccache@v1
-
-      - name: Cache ccache data
-        uses: actions/cache@v3
-        with:
-         path: ~/.ccache
-         key: windows‑cuda‑ccache‑${{ github.sha }}
-         restore‑keys: windows‑cuda‑ccache‑
-
   hip:
     runs-on: windows-2022
 
