@@ -58,15 +58,21 @@ jobs:
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
           cmake -S . -B build -G "Ninja Multi-Config" ^
-            -DLLAMA_BUILD_SERVER=ON ^
+            -DGGML_BUILD_SERVER=ON ^
             -DLLAMA_BUILD_BORINGSSL=ON ^
             -DGGML_NATIVE=OFF ^
-            -DGGML_BACKEND_DL=ON ^
+            -DGGML_CPU_TARGET=AVX2 ^
+            -DBUILD_SHARED_LIBS=OFF ^
+            -DGGML_BACKEND_DL=OFF ^
             -DGGML_CPU_ALL_VARIANTS=ON ^
             -DGGML_CUDA=ON ^
             -DGGML_CUDA_FA=ON ^
-            -DLLAMA_MCP=ON ^
-            -DGGML_RPC=ON ^
+            -DGGML_CUDA_ARCHS="89" ^
+            -DGGML_MCP=ON ^
+            -DGGML_RPC=OFF ^
+            -DGGML_CUDA_MMAP=ON ^
+            -DGGML_NO_EXAMPLES=ON ^
+            -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded$<$<CONFIG:Release>:>" ^
             -DGGML_CUDA_CUB_3DOT2=ON
           set /A NINJA_JOBS=%NUMBER_OF_PROCESSORS%-1
           cmake --build build --config Release -j %NINJA_JOBS% -t ggml
@@ -76,5 +82,15 @@ jobs:
         uses: ./.github/actions/ccache-clear
         with:
           key: release-windows-2022-x64-cuda-${{ matrix.cuda }}
+
+      - name: Upload compiled binaries
+        uses: actions/upload-artifact@v4
+        with:
+         name: windows-cuda12.4-binaries
+         path: |
+          build/Release/*.exe
+          build/Release/*.dll
+          build/Release/*.lib
+
 
   
