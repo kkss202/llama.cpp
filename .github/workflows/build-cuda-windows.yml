@@ -64,7 +64,7 @@ jobs:
             -DGGML_CPU_TARGET=AVX2 ^
             -DBUILD_SHARED_LIBS=OFF ^
             -DGGML_BACKEND_DL=OFF ^
-            -DGGML_CPU_ALL_VARIANTS=ON ^
+            -DGGML_CPU_ALL_VARIANTS=OFF ^
             -DGGML_CUDA=ON ^
             -DGGML_CUDA_FA=ON ^
             -DGGML_CUDA_ARCHS="89" ^
